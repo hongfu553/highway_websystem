@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="\static\favicon.ico"/>
+    <title>首頁</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><b>分隔島控制系統</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">首頁 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">關於 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">控制 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Welcome, {{ current_user.username }}!</h2>
+        <p>本業面會顯示裝置狀況</p>
+        <p>若遇到未正確啟動的裝置，將會顯示在這裡</p>
+        <font color='red'>若遇到以上情況，請聯絡 hongfu553@gmail.com</font>
+
+        <div id="mqtt-status">
+            <p>MQTT Connection Status: <span id="mqtt-status-indicator">Connecting...</span></p>
+        </div>
+    </div>
+
+    <!-- Script to update MQTT status -->
+    <script>
+        // Update MQTT status indicator based on backend MQTT connection status
+        var mqttConnected = {{ mqtt_connected|tojson|safe }}; // Assume this variable is passed from backend
+
+        var mqttStatusIndicator = document.getElementById('mqtt-status-indicator');
+        if (mqttConnected) {
+            mqttStatusIndicator.textContent = 'Connected';
+            mqttStatusIndicator.style.color = 'green'; // Change to green or any color you prefer
+        } else {
+            mqttStatusIndicator.textContent = 'Disconnected';
+            mqttStatusIndicator.style.color = 'red'; // Change to red or any color you prefer
+        }
+    </script>
+</body>
+</html>

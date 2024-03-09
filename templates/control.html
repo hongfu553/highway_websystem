@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="\static\favicon.ico"/>
+    <title>控制</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><b>分隔島控制系統</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">首頁</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">關於</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">控制 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>控制面板</h2>
+        <p>請選擇要執行的操作：</p>
+        
+        <!-- Buttons for controlling -->
+        <div class="btn-group mr-2" role="group" aria-label="Control Buttons">
+            <button type="button" class="btn btn-primary" onclick="setDirection('north')">北上</button>
+            <button type="button" class="btn btn-primary" onclick="setDirection('center')">回中</button>
+            <button type="button" class="btn btn-primary" onclick="setDirection('south')">南下</button>
+        </div>
+        <button type="button" class="btn btn-success" onclick="sendMQTT()">送出</button>
+    </div>
+
+    <script>
+        // Variables to store selected direction
+        var selectedDirection = '';
+
+        // Function to set selected direction
+        function setDirection(direction) {
+            selectedDirection = direction;
+        }
+
+        // Function to send MQTT message
+        function sendMQTT() {
+            if (selectedDirection !== '') {
+                // Send MQTT message based on selected direction
+                // Replace the following line with your MQTT message sending logic
+                console.log('Sending MQTT message for direction: ' + selectedDirection);
+
+                // Reset selected direction
+                selectedDirection = '';
+            } else {
+                alert('請選擇一個方向後再點擊「送出」按鈕。');
+            }
+        }
+    </script>
+</body>
+</html>
