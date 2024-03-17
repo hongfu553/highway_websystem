@@ -21,7 +21,6 @@ mqtt_topic = "hongfu553/road"
 mqtt_client = mqtt.Client()
 mqtt_message = None
 
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -40,6 +39,8 @@ def login():
         if user and user.password == password:
             login_user(user)
             return redirect(url_for('index'))
+        # 添加登录失败的提示消息
+        flash('Invalid username or password. Please try again.', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -51,7 +52,7 @@ def logout():
 @app.route('/')
 def index():
     global mqtt_message
-    mqtt_connect = True
+    mqtt_connect()  # 调用 mqtt_connect 函数以建立 MQTT 连接
     return render_template('index.html', mqtt_message=mqtt_message)
 
 @app.route('/about')
@@ -66,12 +67,13 @@ def handle_mqtt_message(client, userdata, message):
     global mqtt_message
     payload = message.payload.decode('utf-8')
     print(f"Received message: {payload}")
+    mqtt_message = payload
 
 mqtt_client.on_message = handle_mqtt_message
 
 def mqtt_connect():
     mqtt_client.connect(mqtt_broker_address, mqtt_broker_port)
-    mqtt_client.loop_start()
+    mqtt_client.loop_start()  # 启动 MQTT 客户端循环
     print('Connected to MQTT broker')
     mqtt_client.subscribe(mqtt_topic)
 
@@ -84,5 +86,4 @@ def before_request():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        mqtt_connect()
-    app.run(debug=True, port=8000)
+    app.run(debug=False) 
