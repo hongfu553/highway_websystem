@@ -40,7 +40,7 @@ def login():
             login_user(user)
             return redirect(url_for('index'))
         # 添加登录失败的提示消息
-        flash('Invalid username or password. Please try again.', 'error')
+        ('Invalid username or password. Please try again.', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
