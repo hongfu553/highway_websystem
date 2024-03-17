@@ -2,3 +2,4 @@ flask
 flask-bootstrap
 flask-login
 paho-mqtt
+flask_sqlalchemy
