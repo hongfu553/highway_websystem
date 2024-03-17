@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#"><b>分隔島控制系統</b></a>
+        <a class="navbar-brand" href="/"><b>分隔島控制系統</b></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -16,44 +16,52 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">首頁 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">首頁 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">關於 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/about">關於 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">控制 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/control">控制 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    <a class="nav-link" href="/logout">登出</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container mt-5">
-        <h2>Welcome, {{ current_user.username }}!</h2>
-        <p>本業面會顯示裝置狀況</p>
+        <h2>歡迎，{{ current_user.username }}！</h2>
+        <p>本頁面會顯示裝置狀況</p>
         <p>若遇到未正確啟動的裝置，將會顯示在這裡</p>
-        <font color='red'>若遇到以上情況，請聯絡 hongfu553@gmail.com</font>
+        <p style="color: red;">若遇到以上情況，請聯絡 <a href="mailto:hongfu553@gmail.com">hongfu553@gmail.com</a></p>
 
         <div id="mqtt-status">
-            <p>MQTT Connection Status: <span id="mqtt-status-indicator">Connecting...</span></p>
+            <p>MQTT 連線狀態: <span id="mqtt-status-indicator">連線中...</span></p>
         </div>
     </div>
 
     <!-- Script to update MQTT status -->
     <script>
-        // Update MQTT status indicator based on backend MQTT connection status
-        var mqttConnected = {{ mqtt_connected|tojson|safe }}; // Assume this variable is passed from backend
+        // 假設 mqtt_connected 變數從後端傳遞過來
+        var mqttConnected = false; // 假設未連線
 
         var mqttStatusIndicator = document.getElementById('mqtt-status-indicator');
         if (mqttConnected) {
-            mqttStatusIndicator.textContent = 'Connected';
-            mqttStatusIndicator.style.color = 'green'; // Change to green or any color you prefer
+            mqttStatusIndicator.textContent = '已連線';
+            mqttStatusIndicator.style.color = 'green'; // 更改為綠色或任何您喜歡的顏色
         } else {
-            mqttStatusIndicator.textContent = 'Disconnected';
-            mqttStatusIndicator.style.color = 'red'; // Change to red or any color you prefer
+            mqttStatusIndicator.textContent = '未連線';
+            mqttStatusIndicator.style.color = 'red'; // 更改為紅色或任何您喜歡的顏色
         }
+
+        // 處理登出連結
+        document.getElementById("logout").addEventListener("click", function(event){
+            event.preventDefault(); // 防止默認行為（即跳轉到#）
+            // 在此處添加登出相應的後端處理
+            // 例如，可以使用 JavaScript 發送 Ajax 請求來觸發登出操作
+            // 或者將登出連結指向後端處理登出的 URL
+        });
     </script>
 </body>
 </html>
