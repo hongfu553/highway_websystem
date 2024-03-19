@@ -6,7 +6,8 @@ import paho.mqtt.client as mqtt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+# Update the database URI to use PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.atsxuiflbxzohuutmdnh:*$c?MT+?7vqrF7a@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -17,8 +18,6 @@ login_manager.init_app(app)
 mqtt_broker = "broker.hivemq.com"
 mqtt_port = 1883
 mqtt_topic = "hongfu553/road"
-
-#id = str(uuid.uuid4())
 
 client= mqtt.Client()
 client.connect(mqtt_broker,mqtt_port)
@@ -52,7 +51,7 @@ def logout():
 
 @app.route('/')
 def index():
-    return render_template('index.html',)
+    return render_template('index.html')
 
 @app.route('/send', methods=['POST'])
 def send():
@@ -80,4 +79,4 @@ def before_request():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=False) 
+    app.run(debug=False)
