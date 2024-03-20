@@ -2,9 +2,58 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="\static\img\favicon.ico"/>
     <title>控制</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .navbar-nav .nav-link {
+            color: #007bff;
+        }
+        .navbar-nav .nav-item.active .nav-link {
+            color: #000;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            margin-top: 20px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        legend {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        label {
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,41 +79,23 @@
             </ul>
         </div>
     </nav>
-    <div class="container mt-5">
-        <h2>控制面板</h2>
-        <p>請選擇要執行的操作：</p>
-        
-        <!-- Buttons for controlling -->
-        <div class="btn-group mr-2" role="group" aria-label="Control Buttons">
-            <button type="button" class="btn btn-primary" onclick="setDirection('north')">北上</button>
-            <button type="button" class="btn btn-primary" onclick="setDirection('center')">回中</button>
-            <button type="button" class="btn btn-primary" onclick="setDirection('south')">南下</button>
-        </div>
-        <button type="button" class="btn btn-success" onclick="sendMQTT()">送出</button>
-    </div>
-
-    <script>
-        // Variables to store selected direction
-        var selectedDirection = '';
-
-        // Function to set selected direction
-        function setDirection(direction) {
-            selectedDirection = direction;
-        }
-
-        // Function to send MQTT message
-        function sendMQTT() {
-            if (selectedDirection !== '') {
-                // Send MQTT message based on selected direction
-                // Replace the following line with your MQTT message sending logic
-                console.log('Sending MQTT message for direction: ' + selectedDirection);
-
-                // Reset selected direction
-                selectedDirection = '';
-            } else {
-                alert('請選擇一個方向後再點擊「送出」按鈕。');
-            }
-        }
-    </script>
+    <form method="post">
+        <fieldset>
+          <legend>請選擇要移動的路段</legend>
+          <div>
+            <input type="radio" id="contactChoice1" name="mv" value="south" />
+            <label for="contactChoice1">南下路段</label>
+      
+            <input type="radio" id="contactChoice2" name="mv" value="middle" />
+            <label for="contactChoice2">置中</label>
+      
+            <input type="radio" id="contactChoice3" name="mv" value="north" />
+            <label for="contactChoice3">北上路段</label>
+          </div>
+          <div>
+            <button type="submit">提交</button>
+          </div>
+        </fieldset>
+      </form>
 </body>
 </html>

@@ -57,44 +57,9 @@
         <p style="color: red;">若遇到以上情況，請聯絡 <a href="mailto:hongfu553@gmail.com">hongfu553@gmail.com</a></p>
 
         <div id="mqtt-status">
-            <p>MQTT 連線狀態: <span id="connectionStatus">連線中<span class="dots"></span></span></p>
-        </div>
+            <p>MQTT 連線狀態: {{ mqtt_status }}</p>
+        </div>        
     </div>
 
-    <!-- Script to update MQTT status -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
-    <script>
-        var broker = 'hongfu553.myds.me';
-        var port = 1883;
-
-        // MQTT客戶端
-        var client = new Paho.MQTT.Client(broker, port, 'client_id_' + new Date().getTime());
-
-        // 連接成功回調函數
-        function onConnect() {
-            console.log('連接成功');
-            document.getElementById('connectionStatus').textContent = '已連線';
-        }
-
-        // 連接失敗回調函數
-        function onFailure(err) {
-            console.log('連接失敗: ' + err.errorMessage);
-            document.getElementById('connectionStatus').textContent = '未連線';
-        }
-
-        // 設置連接回調函數
-        client.onConnectionLost = function(responseObject) {
-            if (responseObject.errorCode !== 0) {
-                console.log('連接已斷開: ' + responseObject.errorMessage);
-                document.getElementById('connectionStatus').textContent = '已斷開';
-            }
-        };
-
-        // 連接MQTT broker
-        client.connect({
-            onSuccess: onConnect,
-            onFailure: onFailure
-        });
-    </script>
 </body>
 </html>
