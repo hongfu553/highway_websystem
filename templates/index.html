@@ -5,6 +5,26 @@
     <link rel="shortcut icon" href="\static\img\favicon.ico"/>
     <title>首頁</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        @keyframes dots {
+            0% {
+                content: ".";
+            }
+            33% {
+                content: "..";
+            }
+            66% {
+                content: "...";
+            }
+            100% {
+                content: "";
+            }
+        }
+
+        .dots {
+            animation: dots 1s steps(4, end) infinite;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,30 +57,43 @@
         <p style="color: red;">若遇到以上情況，請聯絡 <a href="mailto:hongfu553@gmail.com">hongfu553@gmail.com</a></p>
 
         <div id="mqtt-status">
-            <p>MQTT 連線狀態: <span id="mqtt-status-indicator">連線中...</span></p>
+            <p>MQTT 連線狀態: <span id="connectionStatus">連線中<span class="dots"></span></span></p>
         </div>
     </div>
 
     <!-- Script to update MQTT status -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
     <script>
-        // 假設 mqtt_connected 變數從後端傳遞過來
-        var mqttConnected = false; // 假設未連線
+        var broker = 'broker.hivemq.com';
+        var port = 1883;
 
-        var mqttStatusIndicator = document.getElementById('mqtt-status-indicator');
-        if (mqttConnected) {
-            mqttStatusIndicator.textContent = '已連線';
-            mqttStatusIndicator.style.color = 'green'; // 更改為綠色或任何您喜歡的顏色
-        } else {
-            mqttStatusIndicator.textContent = '未連線';
-            mqttStatusIndicator.style.color = 'red'; // 更改為紅色或任何您喜歡的顏色
+        // MQTT客戶端
+        var client = new Paho.MQTT.Client(broker, port, 'client_id_' + new Date().getTime());
+
+        // 連接成功回調函數
+        function onConnect() {
+            console.log('連接成功');
+            document.getElementById('connectionStatus').textContent = '已連線';
         }
 
-        // 處理登出連結
-        document.getElementById("logout").addEventListener("click", function(event){
-            event.preventDefault(); // 防止默認行為（即跳轉到#）
-            // 在此處添加登出相應的後端處理
-            // 例如，可以使用 JavaScript 發送 Ajax 請求來觸發登出操作
-            // 或者將登出連結指向後端處理登出的 URL
+        // 連接失敗回調函數
+        function onFailure(err) {
+            console.log('連接失敗: ' + err.errorMessage);
+            document.getElementById('connectionStatus').textContent = '未連線';
+        }
+
+        // 設置連接回調函數
+        client.onConnectionLost = function(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log('連接已斷開: ' + responseObject.errorMessage);
+                document.getElementById('connectionStatus').textContent = '已斷開';
+            }
+        };
+
+        // 連接MQTT broker
+        client.connect({
+            onSuccess: onConnect,
+            onFailure: onFailure
         });
     </script>
 </body>

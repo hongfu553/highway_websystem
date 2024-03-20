@@ -15,9 +15,9 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mqtt_broker = "broker.hivemq.com"
+mqtt_broker = "hongfu553.myds.me"
 mqtt_port = 1883
-mqtt_topic = "hongfu553/road"
+mqtt_topic = "tofu/road"
 
 client= mqtt.Client()
 client.connect(mqtt_broker,mqtt_port)
