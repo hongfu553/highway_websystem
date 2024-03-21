@@ -50,20 +50,14 @@ def logout():
 
 @app.route('/')
 def index():
-    """
-    #Fail Ver
-    if hasattr(client, 'connected_flag') and client.connected_flag:
-        mqtt_status = "Connected"
-    else:
-        mqtt_status = "Not Connected"
-    """
-    mqtt_status = check_mqtt_status(mqtt_broker, mqtt_port)
-    if mqtt_status:
-        show_mqtt_status="Connect"
-        print("MQTT Broker is online!")
-    else:
-        show_mqtt_status = "Connect"
-        print("MQTT Broker is offline.")
+    try:
+        mqtt_status = check_mqtt_status(mqtt_broker, mqtt_port)
+        if mqtt_status:
+            show_mqtt_status="Connect"
+        else:
+            show_mqtt_status = "Not Connect"
+    except Exception as e:
+        show_mqtt_status = "Not Connect"
     return render_template('index.html', mqtt_status=show_mqtt_status)
 
 @app.route('/about')
@@ -89,6 +83,6 @@ def before_request():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=False)
+    app.run(debug=True)
 
 
