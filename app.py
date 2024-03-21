@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 import paho.mqtt.client as mqtt
+from mqtt_check import check_mqtt_status
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -49,11 +50,21 @@ def logout():
 
 @app.route('/')
 def index():
+    """
+    #Fail Ver
     if hasattr(client, 'connected_flag') and client.connected_flag:
         mqtt_status = "Connected"
     else:
         mqtt_status = "Not Connected"
-    return render_template('index.html', mqtt_status=mqtt_status)
+    """
+    mqtt_status = check_mqtt_status(mqtt_broker, mqtt_port)
+    if mqtt_status:
+        show_mqtt_status="Connect"
+        print("MQTT Broker is online!")
+    else:
+        show_mqtt_status = "Connect"
+        print("MQTT Broker is offline.")
+    return render_template('index.html', mqtt_status=show_mqtt_status)
 
 @app.route('/about')
 def about():
@@ -73,7 +84,11 @@ def before_request():
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
 
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=False)
+
+
