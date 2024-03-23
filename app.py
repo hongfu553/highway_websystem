@@ -1,9 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
-from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 import paho.mqtt.client as mqtt
-from mqtt_check import check_mqtt_status
+from mqtt_test_tools.mqtt_check import check_mqtt_status
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -14,11 +13,11 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mqtt_broker = "hongfu553.myds.me"
+mqtt_broker = "amd1.oracle.kenchou2006.eu.org"
 mqtt_port = 1883
 mqtt_topic = "tofu/road"
 
-client = mqtt.Client()
+client = mqtt.Client('web')
 client.connect(mqtt_broker, mqtt_port)
 
 class User(db.Model, UserMixin):
@@ -77,8 +76,6 @@ def before_request():
     if not request.path.startswith('/login') and not request.path.startswith('/static'):
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
-
-
 
 if __name__ == '__main__':
     with app.app_context():
