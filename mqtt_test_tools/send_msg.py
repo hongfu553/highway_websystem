@@ -2,7 +2,7 @@
 import ssl
 import paho.mqtt.client as mqtt
 
-broker='amd1.oracle.kenchou2006.eu.org'
+broker='amd2.oracle.kenchou2006.eu.org'
 port=1883
 topic="tofu/road"
 
