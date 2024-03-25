@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mqtt_broker = "amd1.oracle.kenchou2006.eu.org"
+mqtt_broker = "amd2.oracle.kenchou2006.eu.org"
 mqtt_port = 1883
 mqtt_topic = "tofu/road"
 
