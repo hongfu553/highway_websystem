@@ -3,7 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_sqlalchemy import SQLAlchemy
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
-from datetime import datetime
+from datetime import datetime,timedelta
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -26,9 +26,10 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
 
+utc= timedelta(hours=8)
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow() + utc)
     message = db.Column(db.String(255), nullable=False)
     def __repr__(self):
         return f"<Log(id={self.id}, timestamp='{self.timestamp}', message='{self.message}')>"
