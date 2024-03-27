@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_sqlalchemy import SQLAlchemy
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -24,6 +25,14 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    message = db.Column(db.String(255), nullable=False)
+    def __repr__(self):
+        return f"<Log(id={self.id}, timestamp='{self.timestamp}', message='{self.message}')>"
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -69,7 +78,20 @@ def control():
         mv = request.form['mv']
         print(mv)
         client.publish(mqtt_topic,mv)
-    return render_template('control.html')
+        log_entry = Log(message=mv)
+        db.session.add(log_entry)
+        db.session.commit()
+        logs = Log.query.all()
+    else:
+        logs = Log.query.all()
+    return render_template('control.html',logs=logs)
+
+@app.route('/clear_logs',methods=['POST'])
+def clear_logs():
+    if request.method == 'POST':
+        Log.query.delete()
+        db.session.commit()
+        return redirect(url_for('control'))
 
 @app.before_request
 def before_request():

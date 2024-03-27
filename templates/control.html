@@ -81,21 +81,45 @@
     </nav>
     <form method="post">
         <fieldset>
-          <legend>請選擇要移動的路段</legend>
-          <div>
-            <input type="radio" id="contactChoice1" name="mv" value="south" />
-            <label for="contactChoice1">南下路段</label>
-      
-            <input type="radio" id="contactChoice2" name="mv" value="middle" />
-            <label for="contactChoice2">置中</label>
-      
-            <input type="radio" id="contactChoice3" name="mv" value="north" />
-            <label for="contactChoice3">北上路段</label>
-          </div>
-          <div>
-            <button type="submit">提交</button>
-          </div>
+            <legend>請選擇要移動的路段</legend>
+            <div style="margin-bottom: 10px;">
+                <input type="radio" id="contactChoice1" name="mv" value="south" />
+                <label for="contactChoice1" style="margin-right: 10px;">南下路段</label>
+        
+                <input type="radio" id="contactChoice2" name="mv" value="middle" />
+                <label for="contactChoice2" style="margin-right: 10px;">置中</label>
+        
+                <input type="radio" id="contactChoice3" name="mv" value="north" />
+                <label for="contactChoice3" style="margin-right: 10px;">北上路段</label>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
         </fieldset>
       </form>
+      <div style="margin: 20px;">
+        <h2>Log</h2>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">時間</th>
+                    <th scope="col">訊息</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in logs %}
+                <tr>
+                    <td>{{ entry.id }}</td>
+                    <td>{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>{{ entry.message }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form method="post" action="/clear_logs" style="margin-left: 20px;">
+        <button type="submit" class="btn btn-danger">清除日誌</button>
+    </form>    
 </body>
 </html>
