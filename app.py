@@ -48,7 +48,6 @@ def login():
         if user and user.password == password:
             login_user(user)
             return redirect(url_for('index'))
-        flash('Invalid username or password. Please try again.', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -93,6 +92,8 @@ def clear_logs():
         Log.query.delete()
         db.session.commit()
         return redirect(url_for('control'))
+    
+
 
 @app.before_request
 def before_request():
