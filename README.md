@@ -5,5 +5,4 @@ For 星耀光輝隊伍
 <p>目前MQTT狀態無法正確顯示(已解決)</p>
 <p>控制可以正常運作，可以搭配[mqtt_test_tools]配合測試</p>
 功能大多都已新增完畢，有想法後續會陸續增加新功能進去
-<p>Demo web = <a href="https://highway-websystem.vercel.app">https://highway-websystem.vercel.app</a></p>
 <p>Demo web2 = <a href="https://highway-websystem-zn07.onrender.com">https://highway-websystem-zn07.onrender.com</a></p>
