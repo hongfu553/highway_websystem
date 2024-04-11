@@ -1,9 +1,9 @@
 {
   "version": 2,
   "builds": [
-    { "src": "Dockerfile", "use": "@vercel/docker" }
+    { "src": "Dockerfile", "use": "@vercel/static-build" }
   ],
-  "env": {
-    "DOCKER_IMAGE": "hongfu553/highway:v1.0"
-  }
+  "routes": [
+    { "src": "/.*", "dest": "/app.py", "methods": ["GET", "POST"] }
+  ]
 }
