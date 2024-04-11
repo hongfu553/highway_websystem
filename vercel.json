@@ -4,7 +4,8 @@
     { "src": "*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/.*", "dest": "/index.html" }
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/$1.html" }
   ],
   "env": {
     "DOCKER_IMAGE": "hongfu553/highway:v1.0"
