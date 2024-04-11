@@ -1,12 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "Dockerfile", "use": "@vercel/docker" }
+    { "src": "*", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/.*",
-      "dest": "/"
-    }
-  ]
+    { "src": "/.*", "dest": "/index.html" }
+  ],
+  "env": {
+    "DOCKER_IMAGE": "hongfu553/highway:v1.0"
+  },
+  "functions": { "api/*": { "runtime": "docker" } }
 }
