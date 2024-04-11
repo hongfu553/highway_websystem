@@ -1,7 +1,7 @@
 {
   "version": 2,
   "builds": [
-    { "src": "Dockerfile", "use": "@vercel/static-build" }
+    { "src": "build.sh", "use": "@vercel/static-build", "config": { "distDir": "app" } }
   ],
   "routes": [
     { "src": "/.*", "dest": "/app.py", "methods": ["GET", "POST"] }
