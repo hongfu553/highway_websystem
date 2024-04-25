@@ -2,8 +2,13 @@
 import ssl
 import paho.mqtt.client as mqtt
 
+<<<<<<< Updated upstream
 broker='mqtt.kenchou2006.eu.org'
 port=8883
+=======
+broker='192.168.31.21'
+port=1883
+>>>>>>> Stashed changes
 topic="tofu/road"
 username='hongfu553'
 password='F132369445'
