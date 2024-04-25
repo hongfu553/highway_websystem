@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="\static\img\favicon.ico"/>
-    <title>星耀光輝 - 登入</title>
+    <title>星耀光輝 - 註冊</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -45,7 +45,7 @@
             <img src="\static\img\logo.png" alt="Logo" class="logo">
             <h2 class="mb-0">分隔島控制系統</h2>
         </div>
-        <form method="post" action="/login">
+        <form method="post" action="/register">
             <div class="form-group">
                 <label for="username">使用者名稱:</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -54,10 +54,14 @@
                 <label for="password">密碼:</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">登入</button>
+            <div class="form-group">
+                <label for="confirm_password">確認密碼:</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">註冊</button>
         </form>
         <div class="text-center mt-3">
-            <p>還沒有帳號嗎？<a href="/register">點擊這裡註冊</a></p>
+            <p>已經有帳號了？<a href="/login">點擊這裡登入</a></p>
         </div>
     </div>
 </body>

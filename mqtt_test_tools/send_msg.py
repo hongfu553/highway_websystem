@@ -2,16 +2,18 @@
 import ssl
 import paho.mqtt.client as mqtt
 
-broker='amd2.oracle.kenchou2006.eu.org'
-port=1883
+broker='mqtt.kenchou2006.eu.org'
+port=8883
 topic="tofu/road"
+username='hongfu553'
+password='F132369445'
 
 message ='hello'
 #server info
 
 client = mqtt.Client('send')
-
-#client.tls_set(tls_version=ssl.PROTOCOL_TLS)
+client.username_pw_set(username, password)
+client.tls_set(cert_reqs=ssl.CERT_NONE)
 client.connect(broker,port)
 
 client.publish(topic, message)
