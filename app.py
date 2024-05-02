@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
 from datetime import datetime, timedelta
-import ssl
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -45,7 +44,6 @@ class User(db.Model, UserMixin):
         return bcrypt.check_password_hash(self.password_hash, password)
 
     def is_active(self):
-        
         return True
 
 utc = timedelta(hours=8)
@@ -98,11 +96,11 @@ def logout():
     return redirect(url_for('index'))
 
 @app.route('/')
-@login_required
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('main'))  # 如果用戶已登入，則導向主頁面
-    return render_template('login.html')
+    else:
+        return redirect(url_for('login'))  # 如果用戶尚未登入，則導向登入頁面
 
 @app.route('/main')
 @login_required
