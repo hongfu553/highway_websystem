@@ -4,14 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
-<<<<<<< Updated upstream
 from datetime import datetime, timedelta
 import ssl
 
-=======
-from datetime import datetime,timedelta
-import ssl
->>>>>>> Stashed changes
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.atsxuiflbxzohuutmdnh:*$c?MT+?7vqrF7a@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
@@ -21,28 +16,15 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-<<<<<<< Updated upstream
-mqtt_broker = "mqtt.kenchou2006.eu.org"
-mqtt_port = 8883
+mqtt_broker = "highway.us.to"
+mqtt_port = 1883
 mqtt_topic = "tofu/road"
 mqtt_username = 'hongfu553'
 mqtt_password = 'F132369445'
 
 client = mqtt.Client('web')
 client.username_pw_set(mqtt_username, mqtt_password)
-client.tls_set(cert_reqs=ssl.CERT_NONE)
-=======
-#mqtt_broker = "192.168.31.21"
-mqtt_broker = "mqtt.kenchou2006.eu.org"
-mqtt_port = 8883
-mqtt_topic = "tofu/road"
-mqtt_username = "kenchou2006"
-mqtt_password = "kenchou1220"
-
-client = mqtt.Client('web')
-client.tls_set(cert_reqs=ssl.CERT_NONE)
-client.username_pw_set(mqtt_username,mqtt_password)
->>>>>>> Stashed changes
+#client.tls_set(cert_reqs=ssl.CERT_NONE)
 client.connect(mqtt_broker, mqtt_port)
 
 class User(db.Model, UserMixin):
