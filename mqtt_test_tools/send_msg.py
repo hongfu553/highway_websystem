@@ -12,7 +12,7 @@ message ='hello'
 #server info
 
 client = mqtt.Client('send')
-#client.username_pw_set(username, password)
+client.username_pw_set(username, password)
 #client.tls_set(cert_reqs=ssl.CERT_NONE)
 client.connect(broker,port)
 

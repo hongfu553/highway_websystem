@@ -15,7 +15,7 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mqtt_broker = "highway.us.to"
+mqtt_broker = "arm2.oracle.kenchou2006.eu.org"
 mqtt_port = 1883
 mqtt_topic = "tofu/road"
 mqtt_username = 'hongfu553'
