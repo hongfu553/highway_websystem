@@ -5,4 +5,4 @@
 功能大多都已新增完畢，有想法後續會陸續增加新功能進去
 <p>made with Hongfu553</p>
 <p>Demo web = <a href="http://highway.us.to">http://highway.us.to</a></p>
-<p>Use docker deploy <a href="https://hub.docker.com/repository/docker/hongfu553/highway">https://hub.docker.com/repository/docker/hongfu553/highway</a></p>
+<p>Use docker deploy <a href="https://hub.docker.com/r/hongfu553/highway">https://hub.docker.com/r/hongfu553/highway</a></p>
