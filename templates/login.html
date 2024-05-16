@@ -45,6 +45,15 @@
             <img src="\static\img\logo.png" alt="Logo" class="logo">
             <h2 class="mb-0">分隔島控制系統</h2>
         </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <form method="post" action="/login">
             <div class="form-group">
                 <label for="username">使用者名稱:</label>
