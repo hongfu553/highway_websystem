@@ -79,7 +79,7 @@ def register():
         password = request.form['password']
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            flash('Username already exists. Please choose a different one.', 'danger')
+            flash('此帳號名稱已被使用', '危險')
         else:
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             new_user = User(username=username, password_hash=hashed_password)
