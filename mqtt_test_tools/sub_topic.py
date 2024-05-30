@@ -2,9 +2,7 @@
 import paho.mqtt.client as mqtt
 import ssl
 
-# server info
-mqtt_broker = "arm2.oracle.kenchou2006.eu.org"
-#mqtt_broker = "highway.us.to"  # ip
+mqtt_broker = "highway.us.to"  # ip
 mqtt_port = 1883
 mqtt_topic = "tofu/road"  # topic
 username='hongfu553'
