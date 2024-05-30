@@ -3,7 +3,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import paho.mqtt.client as mqtt
-from mqtt_test_tools.mqtt_check import check_mqtt_status
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -18,6 +17,7 @@ login_manager.init_app(app)
 mqtt_broker = "arm2.oracle.kenchou2006.eu.org"
 mqtt_port = 1883
 mqtt_topic = "tofu/road"
+status_topic = "tofu/status" # Status topic to check connection
 mqtt_username = 'hongfu553'
 mqtt_password = 'F132369445'
 
@@ -105,15 +105,7 @@ def index():
 @app.route('/main')
 @login_required
 def main():
-    try:
-        mqtt_status = check_mqtt_status(mqtt_broker, mqtt_port)
-        if mqtt_status:
-            show_mqtt_status = "Connect"
-        else:
-            show_mqtt_status = "Not Connect"
-    except Exception as e:
-        show_mqtt_status = "Not Connect"
-    return render_template('index.html', mqtt_status=show_mqtt_status)
+    return render_template('index.html')
 
 @app.route('/about')
 def about():
@@ -125,6 +117,11 @@ def control():
     if request.method == 'POST':
         mv = request.form['mv']
         print(mv)
+        # Check ESP32 connection status
+        if not check_mqtt_status():
+            flash('ESP32 not connected to MQTT broker!', 'danger')
+            return redirect(url_for('control'))
+        
         client.publish(mqtt_topic, mv)
         log_entry = Log(message=mv)
         db.session.add(log_entry)
@@ -133,6 +130,25 @@ def control():
     else:
         logs = Log.query.all()
     return render_template('control.html', logs=logs)
+
+def check_mqtt_status():
+    status = False
+
+    def on_message(client, userdata, msg):
+        nonlocal status
+        if msg.topic == status_topic and msg.payload.decode() == "connected":
+            status = True
+
+    client.subscribe(status_topic)
+    client.on_message = on_message
+    client.loop_start()
+    client.publish(status_topic, "check")
+
+    # Wait for a short period to receive the status message
+    time.sleep(2)
+    client.loop_stop()
+
+    return status
 
 @app.route('/clear_logs', methods=['POST'])
 @login_required
