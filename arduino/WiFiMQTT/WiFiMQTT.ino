@@ -11,6 +11,7 @@ MqttClient mqttClient(wifiClient);
 const char broker[] = "highway.us.to";
 int        port     = 1883;
 const char topic[]  = "tofu/road";
+const char statusTopic[] = "tofu/status"; // Topic for connection status
 
 void setup() {
   // Initialize serial and wait for port to open:
@@ -40,33 +41,14 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  // Attempt to connect to the MQTT broker
-  Serial.print("Attempting to connect to the MQTT broker: ");
-  Serial.println(broker);
-
-  if (!mqttClient.connect(broker, port)) {
-    Serial.print("MQTT connection failed! Error code = ");
-    Serial.println(mqttClient.connectError());
-
-    while (1);
-  }
-
-  Serial.println("You're connected to the MQTT broker!");
-  Serial.println();
-
-  Serial.print("Subscribing to topic: ");
-  Serial.println(topic);
-  Serial.println();
-
-  // Subscribe to a topic
-  mqttClient.subscribe(topic);
-
-  Serial.print("Waiting for messages on topic: ");
-  Serial.println(topic);
-  Serial.println();
+  connectToMqttBroker();
 }
 
 void loop() {
+  if (!mqttClient.connected()) {
+    connectToMqttBroker();
+  }
+
   int messageSize = mqttClient.parseMessage();
   if (messageSize) {
     // We received a message, print out the topic and contents
@@ -85,9 +67,12 @@ void loop() {
     }
     Serial.println();
     Serial.println();
-    digitalWrite(23,LOW);
-    digitalWrite(22,LOW);
-    digitalWrite(21,LOW);
+
+    // Turn off all LEDs
+    digitalWrite(23, LOW);
+    digitalWrite(22, LOW);
+    digitalWrite(21, LOW);
+
     // Control LED based on message content
     if (messageContent.equals("north")) {
       digitalWrite(23, HIGH); // Turn on north LED
@@ -97,4 +82,34 @@ void loop() {
       digitalWrite(21, HIGH); // Turn on south LED
     }
   }
+}
+
+void connectToMqttBroker() {
+  Serial.print("Attempting to connect to the MQTT broker: ");
+  Serial.println(broker);
+
+  while (!mqttClient.connect(broker, port)) {
+    Serial.print("MQTT connection failed! Error code = ");
+    Serial.println(mqttClient.connectError());
+    delay(5000); // wait 5 seconds before retrying
+  }
+
+  Serial.println("You're connected to the MQTT broker!");
+  Serial.println();
+
+  Serial.print("Subscribing to topic: ");
+  Serial.println(topic);
+  Serial.println();
+
+  // Subscribe to a topic
+  mqttClient.subscribe(topic);
+
+  Serial.print("Waiting for messages on topic: ");
+  Serial.println(topic);
+  Serial.println();
+
+  // Publish connected status
+  mqttClient.beginMessage(statusTopic);
+  mqttClient.print("connected");
+  mqttClient.endMessage();
 }
