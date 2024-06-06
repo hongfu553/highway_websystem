@@ -22,7 +22,7 @@ login_manager.init_app(app)
 
 # MQTT Configuration
 mqtt_broker = os.getenv('broker')
-mqtt_port = 1883  # Convert port to integer
+mqtt_port = int(os.getenv('port'))  # Convert port to integer
 mqtt_topic = os.getenv('topic')
 mqtt_username = os.getenv('username')
 mqtt_password = os.getenv('password')
