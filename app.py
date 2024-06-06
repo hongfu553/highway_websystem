@@ -10,9 +10,9 @@ import os
 
 # Load environment variables
 load_dotenv()
-
+sec_key=os.getenv('SECRET_KEY')
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = sec_key
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
