@@ -5,7 +5,6 @@ from flask_bcrypt import Bcrypt
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
 from datetime import datetime, timedelta
-import pyotp
 from dotenv import load_dotenv
 import os
 
