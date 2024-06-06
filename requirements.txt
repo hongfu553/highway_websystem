@@ -5,3 +5,5 @@ paho-mqtt==1.5.1
 gunicorn
 psycopg2-binary==2.9.9
 flask_bcrypt
+pyotp
+python-dotenv

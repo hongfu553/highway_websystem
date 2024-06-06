@@ -5,26 +5,38 @@ from flask_bcrypt import Bcrypt
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
 from datetime import datetime, timedelta
+import pyotp
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.atsxuiflbxzohuutmdnh:*$c?MT+?7vqrF7a@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mqtt_broker = "arm2.oracle.kenchou2006.eu.org"
-mqtt_port = 1883
-mqtt_topic = "tofu/road"
-mqtt_username = 'hongfu553'
-mqtt_password = 'F132369445'
+# MQTT Configuration
+mqtt_broker = os.getenv('broker')
+mqtt_port = int(os.getenv('port'))  # Convert port to integer
+mqtt_topic = os.getenv('topic')
+mqtt_username = os.getenv('username')
+mqtt_password = os.getenv('password')
 
 client = mqtt.Client('web')
 client.username_pw_set(mqtt_username, mqtt_password)
-#client.tls_set(cert_reqs=ssl.CERT_NONE)
-client.connect(mqtt_broker, mqtt_port)
+# client.tls_set(cert_reqs=ssl.CERT_NONE)
+
+def connect_mqtt():
+    try:
+        client.connect(mqtt_broker, mqtt_port)
+    except Exception as e:
+        print(f"Failed to connect to MQTT broker: {e}")
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -49,7 +61,7 @@ class User(db.Model, UserMixin):
 utc = timedelta(hours=8)
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow() + utc)
+    timestamp = db.Column(db.DateTime, nullable=False, default=lambda: datetime.utcnow() + utc)
     message = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
@@ -145,4 +157,5 @@ def clear_logs():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        connect_mqtt()
     app.run(debug=True)
