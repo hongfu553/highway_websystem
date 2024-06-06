@@ -5,21 +5,22 @@ from flask_bcrypt import Bcrypt
 import paho.mqtt.client as mqtt
 from mqtt_test_tools.mqtt_check import check_mqtt_status
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.atsxuiflbxzohuutmdnh:*$c?MT+?7vqrF7a@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_default_secret_key')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'your_default_database_uri')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-mqtt_broker = "arm2.oracle.kenchou2006.eu.org"
-mqtt_port = 1883
-mqtt_topic = "tofu/road"
-mqtt_username = 'hongfu553'
-mqtt_password = 'F132369445'
+mqtt_broker = os.getenv('MQTT_BROKER', 'default_broker')
+mqtt_port = int(os.getenv('MQTT_PORT', 1883))
+mqtt_topic = os.getenv('MQTT_TOPIC', 'default_topic')
+mqtt_username = os.getenv('MQTT_USERNAME', 'default_username')
+mqtt_password = os.getenv('MQTT_PASSWORD', 'default_password')
 
 client = mqtt.Client('web')
 client.username_pw_set(mqtt_username, mqtt_password)
@@ -146,3 +147,4 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
