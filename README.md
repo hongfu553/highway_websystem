@@ -76,7 +76,7 @@
 
 ## 範例網站
 
-* 您可以通過以下連結訪問範例網站： [https://highway-websystem.vercel.app/login](https://highway-websystem.vercel.app/login)
+* 您可以通過以下連結訪問範例網站： [https://highway-websystem.vercel.app](https://highway-websystem.vercel.app)
 
 ## 貢獻
 
