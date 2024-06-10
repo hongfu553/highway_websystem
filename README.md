@@ -17,7 +17,7 @@
 ## 技術
 
 * **後端:** Flask
-* **資料庫:** SQLite
+* **資料庫:** Supabase
 * **MQTT 庫:** Paho-MQTT
 * **驗證:** Flask-Login 和 Flask-Bcrypt
 
