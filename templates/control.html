@@ -53,6 +53,25 @@
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .admin-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .admin-btn:hover {
+            background-color: #5a6268;
+            cursor: pointer;
+        }
+        .btn-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
     </style>
 </head>
 <body>
@@ -118,8 +137,11 @@
             </tbody>
         </table>
     </div>
-    <form method="post" action="/clear_logs" style="margin-left: 20px;">
-        <button type="submit" class="btn btn-danger">Clear log</button>
-    </form>    
+    <div class="btn-container">
+        <form method="post" action="/clear_logs">
+            <button type="submit" class="btn btn-danger">Clear log</button>
+        </form>
+        <button type="button" class="btn btn-primary admin-btn" onclick="window.open('/admin', '_blank')">Admin</button>
+    </div>
 </body>
 </html>
