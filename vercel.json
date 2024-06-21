@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "flask-app",
+  "name": "my-flask-app",
   "builds": [
     {
       "src": "app.py",
@@ -10,16 +10,16 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "app.py"
+      "dest": "app"
     }
   ],
   "env": {
-    "SECRET_KEY": "your_secret_key_here",
-    "SQLALCHEMY_DATABASE_URI": "postgresql://postgres.atsxuiflbxzohuutmdnh:*$c?MT+?7vqrF7a@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres",
-    "MQTT_BROKER": "highway.us.to",
-    "MQTT_PORT": "1883",
-    "MQTT_TOPIC": "tofu/road",
-    "MQTT_USERNAME": "hongfu553",
-    "MQTT_PASSWORD": "F132369445"
+    "SECRET_KEY": "@secret_key",
+    "SQLALCHEMY_DATABASE_URI": "@sqlalchemy_database_uri",
+    "broker": "@broker",
+    "port": "@port",
+    "topic": "@topic",
+    "username": "@username",
+    "password": "@password"
   }
 }
