@@ -31,6 +31,7 @@ def add_log(log_message):
     db.session.add(log_entry)
     db.session.commit()
 
-def init_app(app):
+def init_db(app):
     db.init_app(app)
-    bcrypt.init_app(app)
+    with app.app_context():
+        db.create_all()

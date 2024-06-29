@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from database import db, Users, Log, add_log, init_app
+from database import db, Users, Log, add_log, init_db
 from admin import init_admin
 from dotenv import load_dotenv
 import os
@@ -9,14 +9,14 @@ import mqtt_process
 # Load environment variables
 load_dotenv()
 sec_key = os.getenv('SECRET_KEY')
-db_uri = os.getenv('DATABASE_URL')
+db_uri = os.getenv('DATABASE_URI')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = sec_key
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
 # Initialize extensions
-init_app(app)
+init_db(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
