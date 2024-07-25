@@ -9,7 +9,7 @@ import mqtt_process
 # Load environment variables
 load_dotenv()
 sec_key = os.getenv('SECRET_KEY')
-db_uri = os.getenv('DATABASE_URI')
+db_uri = os.getenv('database')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = sec_key
@@ -43,16 +43,25 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        if password != confirm_password:
+            flash('密碼不一致', 'danger')
+            return redirect(url_for('register'))
         existing_user = Users.query.filter_by(username=username).first()
         if existing_user:
-            flash('此帳號名稱已被使用', '危險')
+            flash('此帳號名稱已被使用', 'danger')
         else:
-            hashed_password = Users.generate_password_hash(password).decode('utf-8')
-            new_user = Users(username=username, password_hash=hashed_password)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Your account has been created! You can now log in.', 'success')
-            return redirect(url_for('login'))
+            try:
+                new_user = Users(username=username)
+                new_user.password = password  # 這將會雜湊密碼
+                db.session.add(new_user)
+                db.session.commit()
+                flash('你的帳號已建立！現在可以登入。', 'success')
+                return redirect(url_for('login'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'註冊時出現錯誤: {str(e)}', 'danger')
+                app.logger.error(f'註冊時出現錯誤: {str(e)}')
     return render_template('register.html')
 
 @app.route('/logout')

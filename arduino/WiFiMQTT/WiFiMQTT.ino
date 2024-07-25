@@ -1,115 +1,59 @@
-#include <ArduinoMqttClient.h>
-#include <WiFi.h> // For ESP32
+#include <WiFi.h>
+#include <WebServer.h>
 
-// Define your WiFi credentials here
-const char* ssid = "CS_Class";        // replace with your WiFi SSID
-const char* password = "26430686";    // replace with your WiFi password
+const char* ssid = "Xiaomi_3G";
+const char* password = "29180064";
 
-WiFiClient wifiClient;
-MqttClient mqttClient(wifiClient);
+WebServer server(80);
 
-const char broker[] = "highway.us.to";
-int        port     = 1883;
-const char topic[]  = "tofu/road";
-const char statusTopic[] = "tofu/status"; // Topic for connection status
+const int ledPin = 2;  // ESP32板載LED通常連接到GPIO2
 
 void setup() {
-  // Initialize serial and wait for port to open:
   Serial.begin(115200);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
-  pinMode(23, OUTPUT);
-  pinMode(22, OUTPUT);
-  pinMode(21, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(23,OUTPUT);
   
-  // Attempt to connect to WiFi network:
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
   WiFi.begin(ssid, password);
-
-  // Wait until the device is connected to WiFi
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+    delay(1000);
+    Serial.println("正在連接到WiFi...");
   }
-  
-  // When connected, print the IP address
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
+  Serial.println("已連接到WiFi");
+  Serial.print("IP地址: ");
   Serial.println(WiFi.localIP());
 
-  connectToMqttBroker();
+  server.on("/", handleRoot);
+  server.on("/led/on", handleLedOn);
+  server.on("/led/off", handleLedOff);
+
+  server.begin();
+  Serial.println("HTTP服務器已啟動");
 }
 
 void loop() {
-  if (!mqttClient.connected()) {
-    connectToMqttBroker();
-  }
-
-  int messageSize = mqttClient.parseMessage();
-  if (messageSize) {
-    // We received a message, print out the topic and contents
-    Serial.print("Received a message with topic '");
-    Serial.print(mqttClient.messageTopic());
-    Serial.print("', length ");
-    Serial.print(messageSize);
-    Serial.println(" bytes:");
-
-    // Use the Stream interface to print the contents
-    String messageContent = "";
-    while (mqttClient.available()) {
-      char c = mqttClient.read();
-      messageContent += c;
-      Serial.print(c);
-    }
-    Serial.println();
-    Serial.println();
-
-    // Turn off all LEDs
-    digitalWrite(23, LOW);
-    digitalWrite(22, LOW);
-    digitalWrite(21, LOW);
-
-    // Control LED based on message content
-    if (messageContent.equals("north")) {
-      digitalWrite(23, HIGH); // Turn on north LED
-    } else if (messageContent.equals("middle")) {
-      digitalWrite(22, HIGH); // Turn on middle LED
-    } else if (messageContent.equals("south")) {
-      digitalWrite(21, HIGH); // Turn on south LED
-    }
-  }
+  server.handleClient();
 }
 
-void connectToMqttBroker() {
-  Serial.print("Attempting to connect to the MQTT broker: ");
-  Serial.println(broker);
+void handleRoot() {
+  String html = "<html><body>";
+  html += "<h1>ESP32 Web Server</h1>";
+  html += "<p><a href='/led/on'><button>Open PC</button></a></p>";
+  html += "<p><a href='/led/off'><button>關閉LED</button></a></p>";
+  html += "</body></html>";
+  server.send(200, "text/html", html);
+}
 
-  while (!mqttClient.connect(broker, port)) {
-    Serial.print("MQTT connection failed! Error code = ");
-    Serial.println(mqttClient.connectError());
-    delay(5000); // wait 5 seconds before retrying
-  }
+void handleLedOn() {
+  digitalWrite(ledPin, HIGH);
+  digitalWrite(23,HIGH);
+  delay(400);
+  digitalWrite(23,LOW);
+  server.sendHeader("Location", "/");
+  server.send(303);
+}
 
-  Serial.println("You're connected to the MQTT broker!");
-  Serial.println();
-
-  Serial.print("Subscribing to topic: ");
-  Serial.println(topic);
-  Serial.println();
-
-  // Subscribe to a topic
-  mqttClient.subscribe(topic);
-
-  Serial.print("Waiting for messages on topic: ");
-  Serial.println(topic);
-  Serial.println();
-
-  // Publish connected status
-  mqttClient.beginMessage(statusTopic);
-  mqttClient.print("connected");
-  mqttClient.endMessage();
+void handleLedOff() {
+  digitalWrite(ledPin, LOW);
+  server.sendHeader("Location", "/");
+  server.send(303);
 }

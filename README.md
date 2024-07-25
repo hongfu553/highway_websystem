@@ -83,7 +83,7 @@
 歡迎您的貢獻！請隨時提交問題或拉取請求。
 
 ## 聯繫
-
+* 開發日誌:[開發日誌](https://hackmd.io/@O_KZXh_uSL2LuNrAlpnL7g/BkhMFbFOA)
 * 開發者：[@hongfu553](https://github.com/hongfu553)
 
 ## 授權
