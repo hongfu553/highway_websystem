@@ -17,7 +17,7 @@
 ## 技術
 
 * **後端:** Flask
-* **資料庫:** Supabase
+* **資料庫:** sqlite
 * **MQTT 庫:** Paho-MQTT
 * **驗證:** Flask-Login 和 Flask-Bcrypt
 
@@ -42,7 +42,8 @@
 
 **3. 執行**
 
-* 啟動 Flask 應用程式：`flask run`
+* 啟動 Flask 應用程式：`gunicorn app:app`(推薦) or `flask run`
+* (要在flask目錄下)
 
 **4. 存取**
 
@@ -72,23 +73,15 @@
 ## 部署
 
 * 您可以使用 Docker 部署此應用程式。
-* Docker 映像檔已上傳至 Docker Hub： [https://hub.docker.com/r/hongfu553/highway](https://hub.docker.com/r/hongfu553/highway)
-
-## 範例網站
-
-* 您可以通過以下連結訪問範例網站： [https://highway-websystem.vercel.app](https://highway-websystem.vercel.app)
+* 可以透過 Nginx 部署網站
 
 ## 貢獻
 
 歡迎您的貢獻！請隨時提交問題或拉取請求。
 
 ## 聯繫
-* 開發日誌:[開發日誌](https://hackmd.io/@O_KZXh_uSL2LuNrAlpnL7g/BkhMFbFOA)
+* 開發日誌：[HackMD](https://hackmd.io/@O_KZXh_uSL2LuNrAlpnL7g/BkhMFbFOA)
 * 開發者：[@hongfu553](https://github.com/hongfu553)
-
-## 授權
-
-* 此專案採用 MIT 授權。
 
 ## 其他
 
