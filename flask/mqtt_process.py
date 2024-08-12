@@ -1,9 +1,10 @@
 import paho.mqtt.client as mqtt
+from dotenv import load_dotenv
 import os
-
+load_dotenv()
 # MQTT 配置
 mqtt_broker = os.getenv('broker')
-mqtt_port = int(os.getenv('port'))
+mqtt_port = int(os.getenv('port','1883'))
 mqtt_username = os.getenv('username')
 mqtt_password = os.getenv('password')
 
